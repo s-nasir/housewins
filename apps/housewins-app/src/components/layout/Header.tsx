@@ -1,6 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Volume2, VolumeX, ArrowLeft } from 'lucide-react'
+import { useMotionValue, useSpring, useTransform, motion } from 'motion/react'
+import { CurrencyBadge } from '../ui/CurrencyBadge'
+import { useCurrencyStore } from '../../store/currency.store'
 
 export interface Counters {
   houseProfit: number
@@ -19,13 +22,33 @@ export interface HeaderProps {
   showBack?: boolean
 }
 
-const DEFAULT_BALANCE: Balance = { chips: 1000, tokens: 500, tickets: 10 }
+const SPRING_CONFIG = { stiffness: 60, damping: 20 }
 
-const fmt = (n: number) =>
-  new Intl.NumberFormat('en-US').format(n)
+function AnimatedCounter({ value, testId, label }: { value: number; testId: string; label: string }) {
+  const mv = useMotionValue(value)
+  const spring = useSpring(mv, SPRING_CONFIG)
+  const display = useTransform(spring, (n) => new Intl.NumberFormat('en-US').format(Math.round(n)))
 
-export function Header({ counters, balance = DEFAULT_BALANCE, showBack = false }: HeaderProps) {
+  useEffect(() => {
+    mv.set(value)
+  }, [mv, value])
+
+  return (
+    <span data-testid={testId} className="font-mono text-xs text-cream/60 whitespace-nowrap hidden sm:inline">
+      {label}: <motion.span>{display}</motion.span>
+    </span>
+  )
+}
+
+export function Header({ counters, balance, showBack = false }: HeaderProps) {
   const [muted, setMuted] = useState(false)
+  const storeChips = useCurrencyStore((s) => s.chips)
+  const storeTokens = useCurrencyStore((s) => s.tokens)
+  const storeTickets = useCurrencyStore((s) => s.tickets)
+
+  const chips = balance?.chips ?? storeChips
+  const tokens = balance?.tokens ?? storeTokens
+  const tickets = balance?.tickets ?? storeTickets
 
   return (
     <header className="bg-felt-dark px-4 py-3 flex items-center gap-3 min-h-[56px] sticky top-0 z-50">
@@ -41,40 +64,29 @@ export function Header({ counters, balance = DEFAULT_BALANCE, showBack = false }
       </div>
 
       <div className="flex items-center gap-3 flex-1 justify-center min-w-0">
-        <span
-          data-testid="counter-house"
-          className="font-mono text-xs text-cream/60 whitespace-nowrap hidden sm:inline"
-        >
-          House: {counters != null ? fmt(counters.houseProfit) : '—'}
-        </span>
-        <span className="text-cream/30 hidden sm:inline text-xs">|</span>
-        <span
-          data-testid="counter-players"
-          className="font-mono text-xs text-cream/60 whitespace-nowrap hidden sm:inline"
-        >
-          Players: {counters != null ? fmt(counters.totalWinnings) : '—'}
-        </span>
+        {counters != null ? (
+          <>
+            <AnimatedCounter value={counters.houseProfit} testId="counter-house" label="House" />
+            <span className="text-cream/30 hidden sm:inline text-xs">|</span>
+            <AnimatedCounter value={counters.totalWinnings} testId="counter-players" label="Players" />
+          </>
+        ) : (
+          <>
+            <span data-testid="counter-house" className="font-mono text-xs text-cream/60 whitespace-nowrap hidden sm:inline">
+              House: —
+            </span>
+            <span className="text-cream/30 hidden sm:inline text-xs">|</span>
+            <span data-testid="counter-players" className="font-mono text-xs text-cream/60 whitespace-nowrap hidden sm:inline">
+              Players: —
+            </span>
+          </>
+        )}
       </div>
 
       <div className="flex items-center gap-2 flex-shrink-0">
-        <span
-          data-testid="badge-chips"
-          className="inline-flex items-center gap-1 bg-felt-light text-cream text-xs font-body px-2 py-1 rounded-full"
-        >
-          🪙 {fmt(balance.chips)}
-        </span>
-        <span
-          data-testid="badge-tokens"
-          className="inline-flex items-center gap-1 bg-felt-light text-cream text-xs font-body px-2 py-1 rounded-full hidden xs:inline-flex sm:inline-flex"
-        >
-          🎫 {fmt(balance.tokens)}
-        </span>
-        <span
-          data-testid="badge-tickets"
-          className="inline-flex items-center gap-1 bg-felt-light text-cream text-xs font-body px-2 py-1 rounded-full hidden sm:inline-flex"
-        >
-          🎟 {fmt(balance.tickets)}
-        </span>
+        <CurrencyBadge icon="🪙" value={chips} testId="badge-chips" />
+        <CurrencyBadge icon="🎫" value={tokens} testId="badge-tokens" className="hidden xs:inline-flex sm:inline-flex" />
+        <CurrencyBadge icon="🎟" value={tickets} testId="badge-tickets" className="hidden sm:inline-flex" />
 
         <button
           data-testid="mute-toggle"

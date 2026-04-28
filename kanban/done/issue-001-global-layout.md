@@ -11,14 +11,14 @@
 - `src/App.tsx` (wrap routes in PageShell)
 
 ## Acceptance Criteria
-- [ ] Header renders on all pages: logo ("HouseWins.gg"), global counter placeholder (two values), currency balance display (3 badges: Chips / Tokens / Tickets), mute toggle button
-- [ ] Footer renders on lobby page only (`/`): Disclaimer link, Responsible Gambling link, Support link
-- [ ] `PageShell` wraps all routes — header always visible, footer conditional on route
-- [ ] All elements use design tokens from `tailwind.config.js` (felt background, cream text, gold accents)
-- [ ] Layout is mobile-first: header stacks correctly at 375px, 768px, 1280px
-- [ ] Header renders without crashing when counter values are null/undefined (loading state)
-- [ ] Mute toggle button is present and changes icon between 🔊 and 🔇 on click
-- [ ] All tests pass: `pnpm --filter housewins-app test`
+- [x] Header renders on all pages: logo ("HouseWins.gg"), global counter placeholder (two values), currency balance display (3 badges: Chips / Tokens / Tickets), mute toggle button
+- [x] Footer renders on lobby page only (`/`): Disclaimer link, Responsible Gambling link, Support link
+- [x] `PageShell` wraps all routes — header always visible, footer conditional on route
+- [x] All elements use design tokens from `tailwind.config.js` (felt background, cream text, gold accents)
+- [x] Layout is mobile-first: header stacks correctly at 375px, 768px, 1280px
+- [x] Header renders without crashing when counter values are null/undefined (loading state)
+- [x] Mute toggle button is present and changes icon between 🔊 and 🔇 on click
+- [x] All tests pass: `pnpm --filter housewins-app test`
 
 ## Out of Scope
 - Do NOT wire up live SSE counter data (that's issue-005)

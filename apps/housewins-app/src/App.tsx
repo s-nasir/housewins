@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { PageShell } from './components'
 import { DisclaimerModal } from './components/modals/DisclaimerModal'
+import { LobbyPage } from './pages/LobbyPage'
 
 function Placeholder({ name }: { name: string }) {
   return (
@@ -27,7 +28,7 @@ function App() {
     <BrowserRouter>
       <PageShell>
         <Routes>
-          <Route path="/" element={<Placeholder name="HouseWins.gg — Lobby" />} />
+          <Route path="/" element={<LobbyPage />} />
           <Route path="/roulette" element={<Placeholder name="American Roulette" />} />
           <Route path="/blackjack" element={<Placeholder name="Classic Blackjack" />} />
           <Route path="/scratchers" element={<Placeholder name="Digital Scratchers" />} />
