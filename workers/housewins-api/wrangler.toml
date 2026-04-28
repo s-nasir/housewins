@@ -15,7 +15,7 @@ ENVIRONMENT = "development"
 
 [[kv_namespaces]]
 binding = "EXCHANGE_RATE_CACHE"
-id = "placeholder-replace-after-wrangler-kv-create"
+id = "caad86e7528042f08b5adf3458ba5df4"
 
 [dev]
 port = 8787
