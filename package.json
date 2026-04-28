@@ -1,0 +1,17 @@
+{
+  "name": "housewins",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --parallel --filter './apps/*' --filter './workers/*' dev",
+    "build": "pnpm --filter './apps/*' build && pnpm --filter './workers/*' build",
+    "test": "pnpm --recursive test",
+    "test:e2e": "pnpm --filter housewins-app test:e2e",
+    "lint": "pnpm --recursive lint",
+    "typecheck": "pnpm --recursive typecheck"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=10.0.0"
+  }
+}

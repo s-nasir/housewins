@@ -1,0 +1,22 @@
+name = "housewins-api"
+main = "src/index.ts"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "development"
+
+# Upstash Redis — set these via `wrangler secret put` before deploying
+# UPSTASH_REDIS_REST_URL = ""
+# UPSTASH_REDIS_REST_TOKEN = ""
+
+# ExchangeRate API — set via `wrangler secret put`
+# EXCHANGE_RATE_API_KEY = ""
+
+[[kv_namespaces]]
+binding = "EXCHANGE_RATE_CACHE"
+id = "placeholder-replace-after-wrangler-kv-create"
+
+[dev]
+port = 8787
+local_protocol = "http"
