@@ -4,3 +4,4 @@
 export { Header } from './layout/Header'
 export { Footer } from './layout/Footer'
 export { PageShell } from './layout/PageShell'
+export { DisclaimerModal } from './modals/DisclaimerModal'

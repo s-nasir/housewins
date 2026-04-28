@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { PageShell } from './components'
+import { DisclaimerModal } from './components/modals/DisclaimerModal'
 
 function Placeholder({ name }: { name: string }) {
   return (
@@ -11,6 +13,16 @@ function Placeholder({ name }: { name: string }) {
 }
 
 function App() {
+  const [showDisclaimer, setShowDisclaimer] = useState(
+    () => sessionStorage.getItem('disclaimer_seen') !== 'true'
+  )
+
+  useEffect(() => {
+    const handleOpenDisclaimer = () => setShowDisclaimer(true)
+    window.addEventListener('open-disclaimer', handleOpenDisclaimer)
+    return () => window.removeEventListener('open-disclaimer', handleOpenDisclaimer)
+  }, [])
+
   return (
     <BrowserRouter>
       <PageShell>
@@ -26,6 +38,7 @@ function App() {
           <Route path="*" element={<Placeholder name="404 — Page Not Found" />} />
         </Routes>
       </PageShell>
+      <DisclaimerModal isOpen={showDisclaimer} onClose={() => setShowDisclaimer(false)} />
     </BrowserRouter>
   )
 }
